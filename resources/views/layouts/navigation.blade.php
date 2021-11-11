@@ -27,6 +27,9 @@
                     <x-nav-link :href="route('invoice.create')" :active="request()->routeIs('invoice.create')">
                         {{ __('Buat Invoice') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('example')" :active="request()->routeIs('example')">
+                        {{ __('Example') }}
+                    </x-nav-link>
                    
                 </div>
             </div>

@@ -28,4 +28,9 @@ class Invoice extends Model
     {
         return $this->hasMany(InvoiceDetail::class);
     }
+
+    public function district()
+    {
+         return $this->belongsTo(District::class);
+    }
 }

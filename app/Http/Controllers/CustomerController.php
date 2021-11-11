@@ -7,6 +7,7 @@ use App\Models\Customer;
 use App\Models\Province;
 use App\Models\District;
 use App\Models\City;
+use DB;
 
 class CustomerController extends Controller
 {
@@ -32,14 +33,18 @@ class CustomerController extends Controller
             'name' => ['required', 'string'],
             'phone' => ['required', 'max:13'],
             'address' => ['required','string'],
+            'province' => ['required','exists:provinces,id'],
+            'city' => ['required', 'exists:cities,id'],
+            'district' => ['required', 'exists:districts,id']
         ]);
-
-        try{
-            Customer::create($attr);
-            return redirect()->route('customer')->with('message', 'Customer baru telah ditambahkan');    
-        } catch(\Exception $e) {
-            return redirect()->route('customer.create')->with('error', $e->getMessage());
-        }
+        
+        $customer = Customer::create([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'district_id' => $request->district
+        ]);
+        return redirect()->route('customer')->with('message', 'Customer baru telah ditambahkan');   
     }   
 
     public function edit($customer) 
@@ -79,9 +84,11 @@ class CustomerController extends Controller
 
     public function getCity(Request $request)
     {
-        dd($request);
-        $cities = City::where('province_id', request()->province_id)->get();
-        return response()->json(['status' => 'success', 'data' => $cities]);
+        $cities = DB::table("cities")
+         ->where("province_id",$request->province_id)
+         ->pluck("name","id");
+         return response()->json($cities);
+ 
     }
 
     public function getDistrict()

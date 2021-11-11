@@ -46,7 +46,7 @@
 					<div class="sm:rounded-lg px-2 py-2">
 						<div class="mb-5">
 							<x-label for="province_id">Pilih Provinsi</x-label>
-								<select name="province_id" id="province_id" class="mt-1 w-full border border-gray-300 rounded-xl focus:ring focus: ring-blue-200 focus:border-blue-600 transition duration-200" data-placeholder="Select">
+								<select name="province" id="province" class="mt-1 w-full border border-gray-300 rounded-xl focus:ring focus: ring-blue-200 focus:border-blue-600 transition duration-200" data-placeholder="Select">
 								<option value="" class="text-center">-- Pilih Propinsi --</option>
                               	<!-- LOOPING DATA PROVINCE UNTUK DIPILIH OLEH CUSTOMER -->
                                 @foreach ($provinces as $row)
@@ -60,8 +60,7 @@
 
 						<div class="mb-5">
 							<x-label for="city_id">Kabupaten / Kota</x-label>
-								<select name="city_id" id="city_id" class="mt-1 w-full border border-gray-300 rounded-xl focus:ring focus: ring-blue-200 focus:border-blue-600 transition duration-200">
-									
+								<select name="city" id="city" class="mt-1 w-full border border-gray-300 rounded-xl focus:ring focus: ring-blue-200 focus:border-blue-600 transition duration-200">
 								</select>
 								@error('city_id')
 									<div class="text-red-500 mt-2 text-sm">{{ $message }}</div>
@@ -69,60 +68,79 @@
 						</div>	
 
 						<div class="mb-5">
-							<x-label for="district_id">Pilih Kecamatan</x-label>
-								<select name="district_id" id="district_id" class="mt-1 w-full border border-gray-300 rounded-xl focus:ring focus: ring-blue-200 focus:border-blue-600 transition duration-200">
+							<x-label for="district">Pilih Kecamatan</x-label>
+								<select name="district" id="district" class="mt-1 w-full border border-gray-300 rounded-xl focus:ring focus: ring-blue-200 focus:border-blue-600 transition duration-200">
 									
 								</select>
-								@error('district_id')
+								@error('district')
 									<div class="text-red-500 mt-2 text-sm">{{ $message }}</div>
 								@enderror
 						</div>		
-						</div>
-						</div>
-						<x-button>Tambah</x-button>
-					</form>
-				</x-card>
-			</div>
+					</div>
+				</div>
+				<x-button>Tambah</x-button>
+			</form>
+		</x-card>
 		</div>
 		</div>
+	</div>
 	</x-container>
-</x-app-layout>
-@push('javascript')
-	<script>
-		 $('#province_id').on('click', function() {
-            //MAKA AKAN MELAKUKAN REQUEST KE URL /API/CITY
-            //DAN MENGIRIMKAN DATA PROVINCE_ID
-            $.ajax({
-                url: "{{ route('city') }}",
-                type: "GET",
-                data: { province_id: $(this).val() },
-                success: function(html){
-                    //SETELAH DATA DITERIMA, SELEBOX DENGAN ID CITY_ID DI KOSONGKAN
-                    $('#city_id').empty()
-                    //KEMUDIAN APPEND DATA BARU YANG DIDAPATKAN DARI HASIL REQUEST VIA AJAX
-                    //UNTUK MENAMPILKAN DATA KABUPATEN / KOTA
-                    $('#city_id').append('Pilih cok')
-                    $.each(html.data, function(key, item) {
-                        $('#city_id').append('<option value="'+item.id+'">'+item.name+'</option>')
-                    })
-                }
+	@push('js')
+ <script>
+            $(document).ready(function() {
+            $('#province').on('change', function() {
+               var provinceID = $(this).val();
+               if(provinceID) {
+                   $.ajax({
+                       url: '/getCity/'+provinceID,
+                       type: "GET",
+                       data : {"_token":"{{ csrf_token() }}"},
+                       dataType: "json",
+                       success:function(data)
+                       {
+                         if(data){
+                            $('#city').empty();
+                            $('#city').append('<option value="" class="text-center">-- Pilih Kota/Kabupaten  --</option>'); 
+                            $.each(data, function(key, city){
+                                $('select[name="city"]').append('<option value="'+ city.id +'">'+ city.type+'   '+ city.name+'</option>');
+                            });
+                        }else{
+                            $('#city').empty();
+                        }
+                     }
+                   });
+               }else{
+                 $('#city').empty();
+               }
             });
-        })
 
-        //LOGICNYA SAMA DENGAN CODE DIATAS HANYA BERBEDA OBJEKNYA SAJA
-        $('#city_id').on('click', function() {
-            $.ajax({
-                url: "{{ route('district') }}",
-                type: "GET",
-                data: { city_id: $(this).val() },
-                success: function(html){
-                    $('#district_id').empty()
-                    $('#district_id').append('<option value="">Pilih Kecamatan</option>')
-                    $.each(html.data, function(key, item) {
-                        $('#district_id').append('<option value="'+item.id+'">'+item.name+'</option>')
-                    })
-                }
+            $('#city').on('change', function() {
+               var cityID = $(this).val();
+               if(cityID) {
+                   $.ajax({
+                       url: '/getDistrict/'+cityID,
+                       type: "GET",
+                       data : {"_token":"{{ csrf_token() }}"},
+                       dataType: "json",
+                       success:function(data)
+                       {
+                         if(data){
+                            $('#district').empty();
+                            $('#district').append('<option value="" class="text-center">-- Pilih Kecamatan --</option>'); 
+                            $.each(data, function(key, district){
+                                $('select[name="district"]').append('<option value="'+ key +'">' + district.name+ '</option>');
+                            });
+                        }else{
+                            $('#district').empty();
+                        }
+                     }
+                   });
+               }else{
+                 $('#district').empty();
+               }
             });
-        })
-    </script>
+            
+            });
+        </script>
 @endpush
+</x-app-layout>

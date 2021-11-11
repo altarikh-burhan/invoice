@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ExampleController;
+use App\Models\City;
+use App\Models\District;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,11 +20,9 @@ use App\Http\Controllers\InvoiceController;
 */
 
 Route::view('/', 'welcome');
-
-
+Route::get('example/', [ExampleController::class, 'index'])->name('example');
 Route::middleware('auth')->group(function() {
 	Route::view('/dashboard', 'dashboard')->middleware(['auth'])->name('dashboard');
-
 	Route::prefix('product')->group(function () {
 		Route::get('/', [ProductController::class, 'index'])->name('product');
 		Route::get('create', [ProductController::class, 'create'])->name('product.create');
@@ -50,8 +51,17 @@ Route::middleware('auth')->group(function() {
 		Route::delete('/{id}/delete', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
 		Route::get('/{id}/print', [InvoiceController::class, 'generateInvoice'])->name('invoice.print');
 	});
-	
+	Route::get('/getCity/{id}', function($id) {
+    $city = City::where('province_id', $id)->get();
+    return response()->json($city);
+	});
+
+	Route::get('/getDistrict/{id}', function($id) {
+	    $district = App\Models\District::where('city_id', $id)->get();
+	    return response()->json($district);
+	});
 });
+
 
 
 require __DIR__.'/auth.php';

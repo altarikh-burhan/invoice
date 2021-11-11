@@ -18,7 +18,6 @@ use App\Http\Controllers\CustomerController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('province', [CustomerController::class, 'getProvince'])->name('province');
 Route::get('city', [CustomerController::class, 'getCity'])->name('city'); //ROUTE API UNTUK /CITY
 Route::get('district', [CustomerController::class, 'getDistrict'])->name('district'); //ROUTE API UNTUK /DISTRICT
 

@@ -24,6 +24,7 @@
 								<x-th>Nama Lengkap</x-th>
 								<x-th>No Telepon</x-th>
 								<x-th>Alamat</x-th>
+								<x-th>Kecamatan</x-th>
 								<x-th colspan="2">Aksi</x-th>
 							</tr>
 						</thead>
@@ -34,6 +35,7 @@
 								<x-td>{{ $customer->name }}</x-td>
 								<x-td>{{ $customer->phone }}</x-td>
 								<x-td>{{ $customer->address }}</x-td>
+								<x-td>{{ $customer->district->name }}</x-td>
 								<td class="px-6 py-4 whitespace-nowrap">
 									<div class="flex items-center">
 										<div class="ml-4">
@@ -61,7 +63,7 @@
 							</tr>
 							@empty
 							 <tr>
-                                <td class="px-4 py-4 bg-gray-400 font-semibold text-center" colspan="6">Tidak ada data</td>
+                                <td class="px-4 py-4 bg-white font-medium text-center" colspan="6">Tidak ada data</td>
                             </tr>
 							@endforelse
 						</tbody>
