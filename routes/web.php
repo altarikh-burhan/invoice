@@ -22,6 +22,15 @@ use App\Models\District;
 Route::view('/', 'welcome');
 Route::get('example/', [ExampleController::class, 'index'])->name('example');
 Route::middleware('auth')->group(function() {
+	Route::get('/getCity/{id}', function($id) {
+    $city = City::where('province_id', $id)->get();
+    return response()->json($city);
+	});
+
+	Route::get('/getDistrict/{id}', function($id) {
+	    $district = App\Models\District::where('city_id', $id)->get();
+	    return response()->json($district);
+	});
 	Route::view('/dashboard', 'dashboard')->middleware(['auth'])->name('dashboard');
 	Route::prefix('product')->group(function () {
 		Route::get('/', [ProductController::class, 'index'])->name('product');
@@ -50,15 +59,6 @@ Route::middleware('auth')->group(function() {
 		Route::delete('product/{id}', [InvoiceController::class, 'deleteProduct'])->name('invoice.deleteProduct');
 		Route::delete('/{id}/delete', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
 		Route::get('/{id}/print', [InvoiceController::class, 'generateInvoice'])->name('invoice.print');
-	});
-	Route::get('/getCity/{id}', function($id) {
-    $city = City::where('province_id', $id)->get();
-    return response()->json($city);
-	});
-
-	Route::get('/getDistrict/{id}', function($id) {
-	    $district = App\Models\District::where('city_id', $id)->get();
-	    return response()->json($district);
 	});
 });
 

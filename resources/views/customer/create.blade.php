@@ -46,7 +46,7 @@
 					<div class="sm:rounded-lg px-2 py-2">
 						<div class="mb-5">
 							<x-label for="province_id">Pilih Provinsi</x-label>
-								<select name="province" id="province" class="mt-1 w-full border border-gray-300 rounded-xl focus:ring focus: ring-blue-200 focus:border-blue-600 transition duration-200" data-placeholder="Select">
+								<select name="province_id" id="province_id" class="mt-1 w-full border border-gray-300 rounded-xl focus:ring focus: ring-blue-200 focus:border-blue-600 transition duration-200" data-placeholder="Select">
 								<option value="" class="text-center">-- Pilih Propinsi --</option>
                               	<!-- LOOPING DATA PROVINCE UNTUK DIPILIH OLEH CUSTOMER -->
                                 @foreach ($provinces as $row)
@@ -60,7 +60,7 @@
 
 						<div class="mb-5">
 							<x-label for="city_id">Kabupaten / Kota</x-label>
-								<select name="city" id="city" class="mt-1 w-full border border-gray-300 rounded-xl focus:ring focus: ring-blue-200 focus:border-blue-600 transition duration-200">
+								<select name="city_id" id="city_id" class="mt-1 w-full border border-gray-300 rounded-xl focus:ring focus: ring-blue-200 focus:border-blue-600 transition duration-200">
 								</select>
 								@error('city_id')
 									<div class="text-red-500 mt-2 text-sm">{{ $message }}</div>
@@ -69,13 +69,13 @@
 
 						<div class="mb-5">
 							<x-label for="district">Pilih Kecamatan</x-label>
-								<select name="district" id="district" class="mt-1 w-full border border-gray-300 rounded-xl focus:ring focus: ring-blue-200 focus:border-blue-600 transition duration-200">
+								<select name="district_id" id="district_id" class="mt-1 w-full border border-gray-300 rounded-xl focus:ring focus: ring-blue-200 focus:border-blue-600 transition duration-200">
 									
 								</select>
 								@error('district')
 									<div class="text-red-500 mt-2 text-sm">{{ $message }}</div>
 								@enderror
-						</div>		
+						</div>			
 					</div>
 				</div>
 				<x-button>Tambah</x-button>
@@ -88,7 +88,7 @@
 	@push('js')
  <script>
             $(document).ready(function() {
-            $('#province').on('change', function() {
+            $('#province_id').on('change', function() {
                var provinceID = $(this).val();
                if(provinceID) {
                    $.ajax({
@@ -99,22 +99,22 @@
                        success:function(data)
                        {
                          if(data){
-                            $('#city').empty();
-                            $('#city').append('<option value="" class="text-center">-- Pilih Kota/Kabupaten  --</option>'); 
-                            $.each(data, function(key, city){
-                                $('select[name="city"]').append('<option value="'+ city.id +'">'+ city.type+'   '+ city.name+'</option>');
+                            $('#city_id').empty();
+                            $('#city_id').append('<option value="" class="text-center">-- Pilih Kota/Kabupaten  --</option>'); 
+                            $.each(data, function(key, item){
+                                $('#city_id').append('<option value="'+ item.id +'">'+ item.name+'</option>');
                             });
                         }else{
-                            $('#city').empty();
+                            $('#city_id').empty();
                         }
                      }
                    });
                }else{
-                 $('#city').empty();
+                 $('#city_id').empty();
                }
             });
 
-            $('#city').on('change', function() {
+            $('#city_id').on('change', function() {
                var cityID = $(this).val();
                if(cityID) {
                    $.ajax({
@@ -125,18 +125,18 @@
                        success:function(data)
                        {
                          if(data){
-                            $('#district').empty();
-                            $('#district').append('<option value="" class="text-center">-- Pilih Kecamatan --</option>'); 
-                            $.each(data, function(key, district){
-                                $('select[name="district"]').append('<option value="'+ key +'">' + district.name+ '</option>');
+                            $('#district_id').empty();
+                            $('#district_id').append('<option value="" class="text-center">-- Pilih Kecamatan --</option>'); 
+                            $.each(data, function(key, item){
+                                $('#district_id').append('<option value="'+ item.id +'">' + item.name+ '</option>');
                             });
                         }else{
-                            $('#district').empty();
+                            $('#district_id').empty();
                         }
                      }
                    });
                }else{
-                 $('#district').empty();
+                 $('#district_id').empty();
                }
             });
             

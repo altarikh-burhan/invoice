@@ -7,64 +7,81 @@ use App\Models\Customer;
 use App\Models\Province;
 use App\Models\District;
 use App\Models\City;
-use DB;
+use App\Models\Product;
+use Brian2694\Toastr\Facades\Toastr;
 
 class CustomerController extends Controller
 {
     public function index() 
     {
-        $customer = Customer::orderBy('created_at', 'DESC')->paginate(10);
+        $customer = Customer::with('district')->orderBy('created_at', 'DESC')->paginate(10);
+        $product = Product::paginate(10);
         return view('customer.index', [
             'customers' => $customer,
+            'products' => $product
         ]);
     }
 
     public function create()
     {
         $provinces = Province::orderBy('created_at', 'DESC')->get();
-        $cities = City::orderBy('created_at', 'DESC')->get();
-        $districts = District::orderBy('name', 'ASC')->get();
-        return view('customer.create', compact('provinces', 'cities', 'districts'));
+        return view('customer.create', compact('provinces'));
     }
 
     public function store(Request $request) 
     {
-        $attr = $request->validate([
+        $request->validate([
             'name' => ['required', 'string'],
             'phone' => ['required', 'max:13'],
             'address' => ['required','string'],
-            'province' => ['required','exists:provinces,id'],
-            'city' => ['required', 'exists:cities,id'],
-            'district' => ['required', 'exists:districts,id']
+            'province_id' => ['required','exists:provinces,id'],
+            'city_id' => ['required','exists:cities,id'],
+            'district_id' => ['required','exists:districts,id']
         ]);
         
         $customer = Customer::create([
             'name' => $request->name,
             'phone' => $request->phone,
             'address' => $request->address,
-            'district_id' => $request->district
+            'district_id' => $request->district_id
         ]);
-        return redirect()->route('customer')->with('message', 'Customer baru telah ditambahkan');   
+        try{
+            return redirect()->route('customer')->with('message', 'Customer baru telah ditambahkan');   
+        }catch(\Exception $e){
+            return redirect()->route('customer')->with('error', $e->getMessage());
+        }
+        
     }   
 
     public function edit($customer) 
     {
+        $provinces = Province::orderBy('created_at', 'DESC')->get();
+        $customer = Customer::find($customer);
         return view('customer.edit', [
-            'customer' => Customer::find($customer),
+            'customer' => $customer,
+            'provinces' => $provinces,
         ]);
     }
 
     public function update(Request $request, $customer)
     {
-        $attr = $request->validate([
+        $request->validate([
             'name' => ['required', 'string'],
             'phone' => ['required', 'max:13'],
             'address' => ['required','string'],
+            'province_id' => ['required','exists:provinces,id'],
+            'city_id' => ['required','exists:cities,id'],
+            'district_id' => ['required','exists:districts,id']
         ]);
 
         try{
             Customer::where('id', $customer)
-                    ->update($attr);
+                    ->update([
+                        'name' => $request->name,
+                        'phone' => $request->phone,
+                        'address' => $request->address,
+                        'district_id' => $request->district_id
+                    ]);
             return redirect()->route('customer')->with('message', 'Customer telah diperbaharui');    
         } catch(\Exception $e) {
             return redirect()->route('customer.edit')->with('error', $e->getMessage());

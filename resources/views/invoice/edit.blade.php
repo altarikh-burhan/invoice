@@ -32,7 +32,7 @@
 						<tr>
 							<x-td>Alamat</x-td>
 							<x-td>:</x-td>
-							<x-td>{{ $invoice->customer->address }}</x-td>
+							<x-td>{{ $invoice->customer->address }}, {{$invoice->customer->district->name}}, {{$invoice->customer->district->city->name}</x-td>
 						</tr>
 					</tbody>
 				</table>
@@ -118,7 +118,7 @@
 							</td>
 							<td class="px-2 py-2 whitespace-nowrap">
 								<div class="mb-5">
-									<x-input class="mt-1 w-full" type="number" name="qty" id="qty" placeholder="Masukan jumlah produk"  />
+									<x-input class="mt-1 w-full" type="number" name="qty" id="qty"  min="0" placeholder="Masukan jumlah produk"  />
 								</div>
 							</td>
 							<td class="px-2 py-2 whitespace-nowrap" colspan="5">

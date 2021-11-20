@@ -11,8 +11,11 @@ class Customer extends Model
 
     protected $guarded = [];
 
+    protected $with = ['district'];
+
     public function district()
     {
         return $this->belongsTo(District::class);
     }
+    
 }
