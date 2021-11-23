@@ -5,16 +5,9 @@
 		</h1>
 	</x-slot>
 	<div class="container mx-auto px-4 pt-16">
-		@if (session('success'))
-            <div class="bg-green-500 px-4 py-4 font-medium text-green-100">
-                {{ session('success') }}
-            </div>
-     	@endif
-     	@if (session('message'))
-            <div class="bg-red-500 px-4 py-4 font-medium text-white">
-                {{ session('message') }}
-            </div>
-     	@endif	
+     	<h1 class="font-semibold text-xl mb-5">
+			Nomor Invoice : {{ $invoice->invoice}}
+		</h1>
 		<div class="grid grid-cols-2 gap-8">
 			<!-- Pelanggan -->
 			<div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
@@ -32,7 +25,7 @@
 						<tr>
 							<x-td>Alamat</x-td>
 							<x-td>:</x-td>
-							<x-td>{{ $invoice->customer->address }}, {{$invoice->customer->district->name}}, {{$invoice->customer->district->city->name}</x-td>
+							<x-td>{{ $invoice->customer->address }},<br> {{$invoice->customer->district->name}}, {{$invoice->customer->district->city->name}}, {{$invoice->customer->district->city->province->name}}, {{$invoice->customer->district->city->postal_code}}</x-td>
 						</tr>
 					</tbody>
 				</table>
@@ -118,7 +111,7 @@
 							</td>
 							<td class="px-2 py-2 whitespace-nowrap">
 								<div class="mb-5">
-									<x-input class="mt-1 w-full" type="number" name="qty" id="qty"  min="0" placeholder="Masukan jumlah produk"  />
+									<x-input class="mt-1 w-full" type="number" name="qty" id="qty"  min="0" placeholder="Masukan jumlah produk" required/>
 								</div>
 							</td>
 							<td class="px-2 py-2 whitespace-nowrap" colspan="5">

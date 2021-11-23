@@ -19,11 +19,6 @@
     <x-container>
 		<div class="container w-full mx-auto px-2">	
     		<a href="{{ route('product.create') }}" class="inline-flex items-center mt-5 px-4 py-2 bg-blue-700 border border-transparent rounded-xl font-semibold text-sm text-white capitalize tracking-widest hover:bg-blue-700 active:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150 mb-3"> Add Product</a>
-			@if (session('message'))
-				<div class="bg-green-500 px-4 py-3 font-medium text-green-100 rounded mb-3">
-					{{ session('message') }}
-				</div>
-			@endif
 			<div id='recipients' class="p-8 mt-6 m-2 lg:mt-0 rounded shadow overflow-hidden border border-black-200">
 				<table id="example" class="stripe hover min-w-full divide-y divide-gray-200 mt-3" style="width:100%; padding-top: 1em;  padding-bottom: 1em;">
 					<thead class="bg-gray-50">
@@ -43,7 +38,7 @@
 							<td>{{ $product->title}}</td>
 							<td>Rp. {{ number_format($product->price) }}</td>
 							<td>{{ $product->stock }}</td>
-							<td>{{ $product->created_at}}</td>
+							<td>{{ $product->created_at->format('d M Y')}}</td>
 							<td class="px-6 py-4 whitespace-nowrap">
 								<div class="flex items-center">
 									<div class="ml-4">

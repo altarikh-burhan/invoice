@@ -53,7 +53,7 @@
 			</caption>
 			<thead>
 				<tr>
-					<th colspan="3">Invoice <strong>#{{$invoice->id}}</strong></th>
+					<th colspan="3">Invoice <strong> : {{ $invoice->invoice}}</strong></th>
 					<th>{{ $invoice->created_at->format('D, d M Y')}}</th>
 				</tr>
 				<tr>
@@ -66,8 +66,9 @@
 					<td colspan="2">
 						<h4>Pelanggan : </h4>
 						<p>{{ $invoice->customer->name }}<br>
+							{{ $invoice->customer->phone }}<br>
 							{{ $invoice->customer->address }}<br>
-							{{ $invoice->customer->phone }}
+							{{ $invoice->customer->district->name }}, {{ $invoice->customer->district->city->name }},{{ $invoice->customer->district->city->province->name }},{{ $invoice->customer->district->city->postal_code }}
 						</p>
 					</td>
 				</tr>		

@@ -27,14 +27,13 @@
 							</tr>
 						</thead>
 						<tbody class="bg-white divide-y divide-gray-200">
-							@forelse($invoice as $row)
-							<tr>
+							@forelse($invoices as $row)
 								<x-td>{{ $loop->iteration}}</x-td>
 								<x-td>{{ $row->id }}</x-td>
 								<x-td>{{ $row->customer->name }}</x-td>
 								<x-td>{{ $row->customer->phone }}</x-td>
 								<x-td><span class="px-1 py-1 text-blue-500">{{ $row->detail->count() }} </span>Item</x-td>
-								<x-td>{{ number_format($row->total_price)}}</x-td>
+								<x-td>Rp. {{ number_format($row->total_price)}}</x-td>
 								<td class="px-6 py-4 whitespace-nowrap">
 									<div class="flex items-center">
 										<div class="ml-4">
@@ -56,15 +55,14 @@
 										</div>
 									</div>
 								</td>	
-							</tr>
+							</tr>		
 							@empty
-							 <tr>
+							<tr>
                                 <td class="px-4 py-4 bg-gray-400 font-semibold text-center" colspan="6">Tidak ada data</td>
                             </tr>
 							@endforelse
 						</tbody>
 					</table>
-					{{ $invoice->links()}}
 				</div>
 			</div>
 		</div>

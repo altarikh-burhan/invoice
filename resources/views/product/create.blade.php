@@ -33,7 +33,7 @@
 
 						<div class="mb-5">
 							<x-label for="stock">Stok</x-label>
-							<x-input  class="mt-1 w-full" type="number" name="stock" id="stock" />
+							<x-input  class="mt-1 w-full" type="number" name="stock" id="stock" min="0"/>
 							@error('stock')
 								<div class="text-red-500 mt-2 text-sm">{{ $message }}</div>
 							@enderror

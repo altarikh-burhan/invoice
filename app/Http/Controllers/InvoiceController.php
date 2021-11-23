@@ -7,15 +7,17 @@ use App\Models\Customer;
 use App\Models\Invoice;
 use App\Models\InvoiceDetail;
 use App\Models\Product;
+use Illuminate\Support\Str;
 use PDF;
+
 
 class InvoiceController extends Controller
 {
     public function index()
     {
-       $invoice = Invoice::orderBy('created_at', 'DESC')->paginate(10);
+       $invoice = Invoice::orderBy('created_at', 'DESC')->get();
         return view('invoice.index', [
-            'invoice' => $invoice,
+            'invoices' => $invoice,
         ]);
     }
 
@@ -34,6 +36,7 @@ class InvoiceController extends Controller
 
         try {
             $invoice = Invoice::create([
+                'invoice' => Str::random(4) . '-' . time(),
                 'customer_id' => $request->customer_id,
                 'total' => 0
             ]);
@@ -78,7 +81,7 @@ class InvoiceController extends Controller
                     'qty' => $request->qty
                 ]);
             }
-            return redirect()->back()->with('success', "Produk telah ditambahkan");
+            return redirect()->back()->with('message', 'Product telah ditambahkan');
         } catch(\Exception $e) {
             return redirect()->back()->with('message', $e->getMessage());
         }
@@ -88,7 +91,7 @@ class InvoiceController extends Controller
         $detail = InvoiceDetail::find($id);
         try{
             $detail->delete();
-            return redirect()->back()->with(['success' => 'Product telah dihapus']);     
+            return redirect()->back()->with('message', 'Product telah dihapus');  
         } catch(\Exception $e) {
              return redirect()->back()->with('message', $e->getMessage());
         }

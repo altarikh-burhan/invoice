@@ -9,7 +9,7 @@ class ProductController extends Controller
 {
     public function index() 
     {
-        $product = Product::paginate(10);
+        $product = Product::all();
         return view('product.index', [
             'products' => $product,
         ]);
@@ -44,8 +44,7 @@ class ProductController extends Controller
                     'description' => $request->description
                 ]);    
             }
-            
-            return redirect()->route('product')->with('message', 'Produk baru telah ditambahkan');
+            return redirect()->route('product')->with('message', 'Product created successfully!');
         } catch(\Exception $e) {
             return redirect()->route('product.create')->with('error', $e->getMessage());
         }
@@ -77,6 +76,10 @@ class ProductController extends Controller
     public function destroy($product)
     {
         Product::find($product)->delete();
-        return redirect()->route('product')->with('message', 'Produk telah dihapus');
+        $notification = array(
+                'message' => 'Post deleted successfully!',
+                'alert-type' => 'success'
+            );
+        return redirect()->route('product')->with($notification);
     }
 }
